@@ -8,6 +8,7 @@ class InventoryClient:
     def __init__(self, serverAddress):
         self.serverAddress = serverAddress
 
+    # setting up the client address
     def getBookTitle(self, isbnList):
         with grpc.insecure_channel(self.serverAddress) as channel:
             stub = pb2_grpc.InventoryServiceStub(channel)

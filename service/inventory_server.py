@@ -4,6 +4,8 @@ from service import inventoryservice_pb2 as pb2
 from service import inventoryservice_pb2_grpc as pb2_grpc
 from concurrent import futures
 
+# Hard coding a couple of book entries for
+# the purpose of querying.
 book1 = pb2.Book(
     isbn="1001",
     title="Harry Potter",
@@ -27,11 +29,14 @@ class InventoryServicer(pb2_grpc.InventoryServiceServicer):
 
     def CreateBook(self, request, context):
 
+        # If a book with the same isbn sent in the request
+        # exist already, respond with a BAD REQUEST status code.
         for book in bookList:
             if request.book.isbn == book.isbn:
                 print("Book by this ISBN exists already. Try again.")
                 return pb2.CreateBookResponse(statusCode=400)
 
+        # Create a new book based on the request.
         newBook = pb2.Book(
             isbn=request.book.isbn,
             title=request.book.title,
@@ -40,12 +45,15 @@ class InventoryServicer(pb2_grpc.InventoryServiceServicer):
             genre=request.book.genre
         )
 
+        # Add the book to the hard coded database and send
+        # a 201 CREATED status code in the response.
         bookList.append(newBook)
         print("Book added to the database.")
         return pb2.CreateBookResponse(statusCode=201)
 
     def GetBook(self, request, context):
-
+        # Retrieves a book object based on the isbn
+        # coming in the request.
         for book in bookList:
             if request.isbn == book.isbn:
                 return pb2.GetBookResponse(book=book)
