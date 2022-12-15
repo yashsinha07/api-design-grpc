@@ -1,7 +1,7 @@
 import grpc
 import logging
-from protos.service import inventoryservice_pb2 as pb2
-from protos.service import inventoryservice_pb2_grpc as pb2_grpc
+from service import inventoryservice_pb2 as pb2
+from service import inventoryservice_pb2_grpc as pb2_grpc
 from concurrent import futures
 
 book1 = pb2.Book(
